@@ -8,9 +8,9 @@
 
   const CONFIG = {
     csvPath: './puzzles.csv',
-    storageKey: 'universal_daily_quiz_state',
+    storageKey: 'cannauniversal_daily_quiz_state',
     storageVersion: 2,
-    homeUrl: 'https://example.com/',
+    homeUrl: 'https://tileworksgamesstudio.github.io/CannaGames-Home/',
     plusUrl: 'https://example.com/games',
     releaseTimeZone: 'Europe/London',
     maxFloatIcons: 12
