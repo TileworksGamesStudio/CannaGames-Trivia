@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Daily Quiz — A refined daily trivia challenge with archive vault and player statistics.">
+  <title>Daily Quiz</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Dynamic Atmospheric Background Layers -->
+  <div class="bg-atmosphere" aria-hidden="true">
+    <div class="bg-dotted-pinstripe"></div>
+    <div class="bg-micro-texture"></div>
+    <div id="floatingIconsContainer" class="floating-icons-container"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Application Header with Independent Alignment Anchors -->
+    <header class="app-header" id="appHeader">
+      <div class="header-left">
+        <a href="https://example.com/" id="headerHomeBtn" class="btn btn-icon header-nav-btn" aria-label="Return to Tileworks Home">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z"/>
+          </svg>
+        </a>
+        <button id="headerBackBtn" class="btn btn-icon header-nav-btn hidden" aria-label="Back to Menu">
+          <svg class="icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span class="back-label">Menu</span>
+        </button>
+      </div>
+
+      <div class="header-center">
+        <h1 id="appHeaderTitle" class="header-title">Daily Quiz</h1>
+      </div>
+
+      <div class="header-right">
+        <button id="quickSoundBtn" class="btn btn-icon header-nav-btn" aria-label="Toggle Sound">
+          <span id="quickSoundIcon" aria-hidden="true">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Viewport Content Area -->
+    <main id="mainContent" class="main-content">
+      <!-- 1. Status & Initial Loading View -->
+      <section id="statusView" class="view-panel" aria-live="polite">
+        <div class="card status-card">
+          <div class="spinner" aria-hidden="true"></div>
+          <h2 id="statusTitle" class="card-headline">Synchronizing</h2>
+          <p id="statusMessage" class="text-muted">Loading puzzle records and authoritative release time...</p>
+          <button id="statusRetryBtn" class="btn btn-primary hidden" type="button">Retry Connection</button>
+        </div>
+      </section>
+
+      <!-- 2. Main Menu View (Centered on Viewport) -->
+      <section id="menuView" class="view-panel hidden">
+        <div class="menu-column">
+          <!-- Primary Action 1: Play Game -->
+          <button id="playTodayBtn" class="menu-action-card primary-action" type="button">
+            <div class="menu-action-content">
+              <div class="action-meta-row">
+                <span class="action-tag">Today's Release</span>
+                <span id="menuTodayBadge" class="badge">Ready</span>
+              </div>
+              <span id="playTodayTitle" class="action-title">Play Daily Quiz</span>
+              <span id="menuReleaseDate" class="action-subtitle">Connecting...</span>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+
+          <!-- Primary Action 2: Vault -->
+          <button id="openVaultBtn" class="menu-action-card" type="button">
+            <div class="menu-action-content">
+              <div class="action-meta-row">
+                <span class="action-tag">Archive</span>
+                <span id="vaultCountBadge" class="badge">0</span>
+              </div>
+              <span class="action-title">The Vault</span>
+              <span class="action-subtitle">Browse and solve past daily puzzles</span>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+
+          <!-- Primary Action 3: Settings -->
+          <button id="openSettingsBtn" class="menu-action-card" type="button">
+            <div class="menu-action-content">
+              <div class="action-meta-row">
+                <span class="action-tag">Preferences</span>
+              </div>
+              <span class="action-title">Settings</span>
+              <span class="action-subtitle">Animation, audio and preferences</span>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+
+          <!-- Primary Action 4: How to Play -->
+          <button id="openHowToPlayBtn" class="menu-action-card" type="button">
+            <div class="menu-action-content">
+              <div class="action-meta-row">
+                <span class="action-tag">Guide</span>
+              </div>
+              <span class="action-title">How to Play</span>
+              <span class="action-subtitle">Rules, scoring and streak mechanics</span>
+            </div>
+            <div class="action-arrow" aria-hidden="true">→</div>
+          </button>
+
+          <!-- Bottom Centered Utility Row (Stats, Share, Plus) -->
+          <div class="utility-row" role="group" aria-label="Quick Utilities">
+            <button id="statsUtilityBtn" class="utility-btn" type="button" aria-label="View Player Statistics">
+              <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 20V10M12 20V4M6 20v-6"/>
+              </svg>
+              <span class="utility-label">Stats</span>
+            </button>
+
+            <button id="shareUtilityBtn" class="utility-btn" type="button" aria-label="Share Daily Quiz">
+              <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span class="utility-label">Share</span>
+            </button>
+
+            <button id="plusUtilityBtn" class="utility-btn" type="button" aria-label="More Tileworks Games">
+              <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span class="utility-label">Plus</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Gameplay View -->
+      <section id="gameView" class="view-panel hidden">
+        <div class="game-column">
+          <!-- Game Meta Bar -->
+          <div class="game-meta-card">
+            <span id="gameModeBadge" class="game-mode-tag">Daily Release</span>
+            <div id="stepperTrack" class="stepper-track" role="group" aria-label="Question Progress"></div>
+          </div>
+
+          <!-- Central Game Board -->
+          <div class="card game-board-card" id="gameBoard">
+            <div class="question-header">
+              <span id="questionCounterLabel" class="question-counter">Question 1 of 5</span>
+            </div>
+            <h2 id="questionText" class="question-text">Question loading...</h2>
+            <div id="optionsContainer" class="options-container" role="radiogroup" aria-label="Quiz Options"></div>
+          </div>
+
+          <!-- Supporting Text & Answer Feedback -->
+          <div id="explanationPanel" class="card explanation-panel hidden" aria-live="polite">
+            <div class="explanation-header">
+              <span id="answerIndicator" class="badge"></span>
+              <h3 class="explanation-title">Explanation</h3>
+            </div>
+            <p id="explanationText" class="explanation-text"></p>
+            <button id="nextQuestionBtn" class="btn btn-primary" type="button">Next Question</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Results View -->
+      <section id="resultsView" class="view-panel hidden">
+        <div class="card results-card">
+          <span class="action-tag">Summary</span>
+          <h2 id="resultsHeadline" class="results-title">Quiz Complete</h2>
+          <div class="score-display">
+            <span id="scoreValue" class="score-number">0</span>
+            <span id="scoreTotal" class="score-denom">/ 5</span>
+          </div>
+          <p id="resultsSubtitle" class="text-muted">Breakdown of answers</p>
+          <div id="resultsBreakdown" class="results-breakdown" aria-label="Answer breakdown"></div>
+
+          <div class="results-stats-row">
+            <div class="stat-pill">
+              <span class="stat-pill-label">Streak</span>
+              <strong id="resultsStreakValue" class="stat-pill-value">0</strong>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-label">Accuracy</span>
+              <strong id="resultsAccuracyValue" class="stat-pill-value">0%</strong>
+            </div>
+          </div>
+
+          <div class="results-actions">
+            <button id="shareScoreBtn" class="btn btn-primary" type="button">Share Results</button>
+            <div class="button-row">
+              <button id="reviewQuizBtn" class="btn btn-secondary" type="button">Review Answers</button>
+              <button id="resultsVaultBtn" class="btn btn-secondary" type="button">The Vault</button>
+            </div>
+            <button id="resultsMenuBtn" class="btn btn-secondary" type="button">Return to Menu</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Vault View -->
+      <section id="vaultView" class="view-panel hidden">
+        <div class="card vault-card">
+          <div class="card-header-row">
+            <div>
+              <span class="action-tag">Archive</span>
+              <h2 class="card-headline">The Vault</h2>
+            </div>
+            <span id="vaultTotalBadge" class="badge">0 Puzzles</span>
+          </div>
+          <p class="text-muted">Play previously released puzzles. Future daily releases remain locked.</p>
+          <div id="vaultList" class="vault-list" role="list"></div>
+          <p id="vaultEmptyMsg" class="text-muted hidden">No previous puzzles available in the archive yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- SLIDING RIGHT-SIDE PANELS (STRICT HORIZONTAL ENTRANCE) -->
+    <div id="panelBackdrop" class="panel-backdrop hidden" aria-hidden="true"></div>
+
+    <!-- Panel 1: How to Play Drawer -->
+    <aside id="howToPlayDrawer" class="side-drawer" aria-labelledby="howToPlayTitle" aria-modal="true" role="dialog" hidden>
+      <div class="drawer-header">
+        <div>
+          <span class="action-tag">Instructions</span>
+          <h2 id="howToPlayTitle" class="drawer-title">How to Play</h2>
+        </div>
+        <button id="closeHowToBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Instructions" type="button">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="guide-step">
+          <div class="guide-num">1</div>
+          <div class="guide-content">
+            <h4>Daily Release</h4>
+            <p>A fresh 5-question trivia challenge unlocks every day at midnight UK time (Europe/London). Future puzzles remain locked.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">2</div>
+          <div class="guide-content">
+            <h4>One-Tap Answers</h4>
+            <p>Select the best answer from the four choices provided. Immediate tactile verification and verified explanations appear below.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">3</div>
+          <div class="guide-content">
+            <h4>Streaks &amp; Scoring</h4>
+            <p>Complete today's puzzle before the next midnight release to increment your daily streak. Missed days reset the streak to 1 upon completion.</p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">4</div>
+          <div class="guide-content">
+            <h4>The Vault</h4>
+            <p>Catch up on any missed puzzles or practice with previous dates in the archive. Vault puzzles do not affect your active daily streak.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Panel 2: Settings Drawer -->
+    <aside id="settingsDrawer" class="side-drawer" aria-labelledby="settingsTitle" aria-modal="true" role="dialog" hidden>
+      <div class="drawer-header">
+        <div>
+          <span class="action-tag">Preferences</span>
+          <h2 id="settingsTitle" class="drawer-title">Settings</h2>
+        </div>
+        <button id="closeSettingsBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Settings" type="button">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Background Animation</span>
+            <span class="setting-desc">Floating background botanical leaves</span>
+          </div>
+          <button id="toggleAnimationBtn" class="btn btn-toggle" type="button" role="switch" aria-checked="true">
+            <span class="toggle-state">ON</span>
+          </button>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Sound Effects</span>
+            <span class="setting-desc">Tactile audio feedback tones</span>
+          </div>
+          <button id="toggleSoundBtn" class="btn btn-toggle" type="button" role="switch" aria-checked="true">
+            <span class="toggle-state">ON</span>
+          </button>
+        </div>
+
+        <div class="setting-item reset-item">
+          <div class="setting-info">
+            <span class="setting-label">Reset Local Progress</span>
+            <span class="setting-desc">Clear local history and streak data</span>
+          </div>
+          <button id="resetDataBtn" class="btn btn-danger" type="button">Reset</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Panel 3: Stats Drawer -->
+    <aside id="statsDrawer" class="side-drawer" aria-labelledby="statsTitle" aria-modal="true" role="dialog" hidden>
+      <div class="drawer-header">
+        <div>
+          <span class="action-tag">Record</span>
+          <h2 id="statsTitle" class="drawer-title">Player Stats</h2>
+        </div>
+        <button id="closeStatsBtn" class="btn btn-icon drawer-close-btn" aria-label="Close Stats" type="button">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-big-val" id="statPlayed">0</span>
+            <span class="stat-sub">Played</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-big-val" id="statAccuracy">0%</span>
+            <span class="stat-sub">Accuracy</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-big-val" id="statCurrentStreak">0</span>
+            <span class="stat-sub">Current Streak</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-big-val" id="statBestStreak">0</span>
+            <span class="stat-sub">Max Streak</span>
+          </div>
+        </div>
+
+        <div class="stat-section">
+          <h4 class="stat-section-title">Score Distribution</h4>
+          <div id="scoreDistributionChart" class="score-dist-chart"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Toast Feedback Notification -->
+    <div id="toastMessage" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
